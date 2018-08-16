@@ -14,14 +14,26 @@ var BBS_PASS = "ipCU12ySxI";
   await page.type('input[name="password_mmlbbs6"]', BBS_PASS);
   const inputElement = await page.$('input[type=submit]');
   await inputElement.click();
-  await page.waitForNavigation({timeout: 60000, waitUntil: "domcontentloaded"});
+  await page.waitForNavigation({ timeout: 60000, waitUntil: "domcontentloaded" });
 
   const myPageUrl = await page.evaluate(() =>
     document.querySelector('#header_menu_linkbar a').href
   );
   await page.goto(myPageUrl);
-  await page.screenshot({
-    path: 'flicker-cat.png'
+
+  const res = await page.evaluate(() => {
+    var tmp = [];
+    var q = document.querySelectorAll('#favlist li > a');
+    for (var i = 0; i < q.length; i++) {
+      var text = q[i].textContent;
+      q[i].href;
+      tmp.push(text);
+    }
+    return tmp;
   });
+  console.log("--- favlist ---");
+  for (var i = 0; i < res.length; i++) {
+    console.log("- " + res[i]);
+  }
   await browser.close();
 })();
